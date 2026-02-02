@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Web Catatan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-sticky-note"></i> Web Catatan</h2>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="notes">
+                    <i class="fas fa-file-alt"></i> Semua Catatan
+                </a>
+                <a href="#" class="nav-item" data-section="favorites">
+                    <i class="fas fa-star"></i> Favorit
+                </a>
+                <a href="#" class="nav-item" data-section="categories">
+                    <i class="fas fa-folder"></i> Kategori
+                </a>
+                <a href="#" class="nav-item" data-section="tags">
+                    <i class="fas fa-tags"></i> Tag
+                </a>
+                <a href="#" class="nav-item" data-section="reminders">
+                    <i class="fas fa-bell"></i> Pengingat
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">User</span>
+                </div>
+                <button onclick="logout()" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="currentDate"></p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Cari catatan...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button class="btn-primary" onclick="createNote()">
+                        <i class="fas fa-plus"></i> Buat Catatan
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section active">
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalNotes">0</h3>
+                            <p>Total Catatan</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="favoriteNotes">0</h3>
+                            <p>Catatan Favorit</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalCategories">0</h3>
+                            <p>Kategori</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeReminders">0</h3>
+                            <p>Pengingat Aktif</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Aksi Cepat</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="createNote()">
+                            <i class="fas fa-plus"></i>
+                            <span>Catatan Baru</span>
+                        </button>
+                        <button class="action-btn" onclick="createCategory()">
+                            <i class="fas fa-folder-plus"></i>
+                            <span>Kategori Baru</span>
+                        </button>
+                        <button class="action-btn" onclick="createTag()">
+                            <i class="fas fa-tag"></i>
+                            <span>Tag Baru</span>
+                        </button>
+                        <button class="action-btn" onclick="exportNotes()">
+                            <i class="fas fa-download"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Notes and Pinned Notes -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-clock"></i> Catatan Terbaru</h3>
+                        <div id="recentNotes" class="notes-list">
+                            <!-- Recent notes will be populated here -->
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-thumbtack"></i> Catatan Dipin</h3>
+                        <div id="pinnedNotes" class="notes-list">
+                            <!-- Pinned notes will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Tags and Reminders -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-tags"></i> Tag Populer</h3>
+                        <div id="popularTags" class="tags-container">
+                            <!-- Popular tags will be populated here -->
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-bell"></i> Pengingat Hari Ini</h3>
+                        <div id="todayReminders" class="reminders-list">
+                            <!-- Today's reminders will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes Section -->
+            <section id="notesSection" class="content-section">
+                <div class="notes-header">
+                    <div class="notes-filters">
+                        <select id="sortBy">
+                            <option value="date">Tanggal</option>
+                            <option value="title">Judul</option>
+                            <option value="category">Kategori</option>
+                        </select>
+                        <select id="filterCategory">
+                            <option value="">Semua Kategori</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="notesGrid" class="notes-grid">
+                    <!-- Notes will be populated here -->
+                </div>
+            </section>
+
+            <!-- Other sections will be added here -->
+            <section id="favoritesSection" class="content-section">
+                <div id="favoritesGrid" class="notes-grid">
+                    <!-- Favorite notes will be populated here -->
+                </div>
+            </section>
+
+            <section id="categoriesSection" class="content-section">
+                <div id="categoriesGrid" class="categories-grid">
+                    <!-- Categories will be populated here -->
+                </div>
+            </section>
+
+            <section id="tagsSection" class="content-section">
+                <div id="tagsGrid" class="tags-grid">
+                    <!-- Tags will be populated here -->
+                </div>
+            </section>
+
+            <section id="remindersSection" class="content-section">
+                <div id="remindersGrid" class="reminders-grid">
+                    <!-- Reminders will be populated here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Note Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Buat Catatan Baru</h3>
+                <button class="modal-close" onclick="closeNoteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <input type="hidden" id="noteId">
+                    <div class="form-group">
+                        <input type="text" id="noteTitle" placeholder="Judul catatan..." required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="noteContent" placeholder="Tulis catatan Anda di sini..." rows="10" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <select id="noteCategory">
+                                <option value="">Pilih Kategori</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="noteTags" placeholder="Tag (pisahkan dengan koma)">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="datetime-local" id="noteReminder">
+                            <label for="noteReminder">Pengingat</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="notePinned">
+                                <span>Pin catatan ini</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeNoteModal()">Batal</button>
+                        <button type="submit" class="btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
